@@ -2,4 +2,7 @@ function generateRandomNumber() {
     return Math.floor(Math.random() * 100) + 1;
 }
 
-module.exports = generateRandomNumber;
+function CelToFar(celcius) {
+    return (celcius * 9) / 5 + 32;
+}
+module.exports = { generateRandomNumber, CelToFar };
