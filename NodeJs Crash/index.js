@@ -1,7 +1,7 @@
-import getPosts, { getPostLength } from "./postController.js";
+// import getPosts, { getPostLength } from "./postController.js";
 
-console.log(getPosts());
-console.log(`Post Length: ${getPostLength()}`);
+// console.log(getPosts());
+// console.log(`Post Length: ${getPostLength()}`);
 
 
 
@@ -9,4 +9,8 @@ console.log(`Post Length: ${getPostLength()}`);
 
 // console.log(`Random Number: ${generateRandomNumber()}`);
 // console.log(`Celsius to Farenhite: ${CelToFar(0)}`);
+
+const generateRandomNumb = require('./utils.js')
+
+console.log(`Random number is ${generateRandomNumb()}`);
 
