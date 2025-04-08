@@ -22,6 +22,34 @@ import fs from 'fs/promises';
 //     .catch((err) => console.log(err));
     
 
+
+
+// WriteFile()
+
+const writeFile = async () => {
+    try {
+        await fs.writeFile('./test.txt', 'Hello I am writing in this file');
+        console.log('File written ');
+    } catch (error) {
+        console.log(error);
+        
+    }
+};
+
+
+// appendFile()
+
+const appendFile = async () => {
+    try {
+        await fs.appendFile('./test.txt', '\ni am appending this text')
+        console.log('File appended\n');
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
 // readFile() -- async/await
 
 const readFile = async () => {
@@ -35,17 +63,15 @@ const readFile = async () => {
     }
 }
 
-// WriteFile()
 
-const WriteFile = async () => {
-    try {
-        await fs.writeFile('./test.txt', 'Hello I am writing in this file');
-        console.log('File written ');
-    } catch (error) {
-        console.log(error);
-        
-    }
+const runAll = async () => {
+    // await writeFile();
+    await appendFile();
+    await readFile();
 };
 
-WriteFile();
-readFile();
+runAll();
+
+// writeFile();
+// appendFile();
+// readFile();
