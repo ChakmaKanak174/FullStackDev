@@ -1,4 +1,3 @@
-import { log } from 'console';
 import url from 'url';
 
 const urlString = 'http://www.google.com/search?q=hello+world';
