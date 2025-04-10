@@ -1,5 +1,7 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import posts from './routes/posts.js' // router module 
+
 const port = process.env.PORT || 8000;
 
 const app = express();
@@ -22,41 +24,9 @@ const app = express();
 //     res.send('About');
 // })
 
-let posts = [
-    { id: 1, title: 'Post one' },
-    { id: 2, title: 'Post two' },
-    {id: 3, title: 'Post three'}
-]
+// routes are imported and used here using use method and it is used as middleware. 
 
-
-// get all posts 
-app.get('/api/posts', (req, res) => {
-    
-    const limit = parseInt(req.query.limit);
-
-    if (!isNaN(limit) && limit > 0) {       // need to be very carefull in handling datatype because someone might want to inject SQL queries
-        return res.status(200).json(posts.slice(0, limit));
-    }
-    
-    res.status(200).json(posts);
-
-    
-});
-
-
-// get single post
-app.get('/api/posts/:id', (req, res) => {
-    const id = parseInt(req.params.id); // id string is pares into integer. req.params take the param from the url
-    
-    const post = posts.find((post) => post.id === id);
-
-    if (!post) {
-        return res.status(404).json({msg: `The post with id ${id} was not found`})
-    }
-
-    res.status(200).json(post);
-})
-
+app.use('/api/posts', posts);
 
 
 app.listen(port, () => console.log(`Server is running on port ${port}`)
