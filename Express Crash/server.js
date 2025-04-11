@@ -6,6 +6,13 @@ const port = process.env.PORT || 8000;
 
 const app = express();
 
+// Body parser middleware
+
+app.use(express.json());    // raw json 
+app.use(express.urlencoded({ extended: false })); // allows to send form data
+
+
+
 // setup static folder in case of having lot of html files that need to be routed one by one
 
 // app.use(express.static(path.join(__dirname, 'public'), {extensions: ['html']} ))
