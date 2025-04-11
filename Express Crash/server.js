@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import posts from './routes/posts.js' // router module 
+import logger from './middleware/logger.js';
 
 const port = process.env.PORT || 8000;
 
@@ -11,7 +12,8 @@ const app = express();
 app.use(express.json());    // raw json 
 app.use(express.urlencoded({ extended: false })); // allows to send form data
 
-
+//logger middleware
+app.use(logger)
 
 // setup static folder in case of having lot of html files that need to be routed one by one
 

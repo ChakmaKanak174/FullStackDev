@@ -10,6 +10,10 @@ let posts = [
     {id: 3, title: 'Post three'}
 ]
 
+
+
+
+
 // get all posts 
 router.get('/', (req, res) => {
     
