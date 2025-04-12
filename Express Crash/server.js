@@ -2,6 +2,9 @@ import express from 'express';
 import path from 'path';
 import posts from './routes/posts.js' // router module 
 import logger from './middleware/logger.js';
+import errorHandler from './middleware/errorHandler.js';
+import notFoundHandler from './middleware/botFound.js';
+
 
 const port = process.env.PORT || 8000;
 
@@ -37,6 +40,9 @@ app.use(logger)
 
 app.use('/api/posts', posts);
 
+app.use(notFoundHandler);
+// ErrorHandler
+app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server is running on port ${port}`)
 )
