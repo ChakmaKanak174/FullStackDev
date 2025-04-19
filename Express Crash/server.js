@@ -1,12 +1,18 @@
 import express from 'express';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
 import posts from './routes/posts.js' // router module 
 import logger from './middleware/logger.js';
 import errorHandler from './middleware/errorHandler.js';
 import notFoundHandler from './middleware/botFound.js';
-
-
 const port = process.env.PORT || 8000;
+
+
+// get directory name 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 const app = express();
 
@@ -20,7 +26,7 @@ app.use(logger)
 
 // setup static folder in case of having lot of html files that need to be routed one by one
 
-// app.use(express.static(path.join(__dirname, 'public'), {extensions: ['html']} ))
+app.use(express.static(path.join(__dirname, 'public')))
 
 
 // no need to manually check the req.method like in the base node
