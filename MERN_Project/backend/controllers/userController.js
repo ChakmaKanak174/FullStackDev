@@ -46,6 +46,7 @@ const regUser = asynchandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      token: generateToken(user._id),
     });
   } else {
     res.status(400);
@@ -58,6 +59,27 @@ const regUser = asynchandler(async (req, res) => {
 //@access Public
 
 const loginUser = asynchandler(async (req, res) => {
+  if (!req.body) {
+    return res.status(400).json({ message: "Missing request body" });
+  }
+
+  const { email, password } = req.body;
+
+  // check for user email
+  const user = await User.findOne({ email });
+
+  if (user && (await bcrypt.compare(password, user.password))) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid Credentials");
+  }
+
   res.json({ message: "Login User" });
 });
 
@@ -68,6 +90,14 @@ const loginUser = asynchandler(async (req, res) => {
 const getMe = asynchandler(async (req, res) => {
   res.json({ message: "User Data display" });
 });
+
+// Generate JWT
+
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
 
 module.exports = {
   regUser,
