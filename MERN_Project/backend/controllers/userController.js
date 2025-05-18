@@ -1,26 +1,73 @@
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const asynchandler = require("express-async-handler");
+const User = require("../models/userModel");
+
 //@desc register new user
 //@route POST /api/users
 //@access Public
 
-const regUser = (req, res) => {
-  res.json({ message: "Register User" });
-};
+const regUser = asynchandler(async (req, res) => {
+  //check if body is missing
+  if (!req.body) {
+    return res.status(400).json({ message: "Missing request body" });
+  }
+
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    res.status(400);
+    throw new Error("Please add all fields");
+  }
+
+  //check if User Exists
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    res.status(400);
+    throw new Error("User already Exists");
+  }
+
+  // hash password
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  // create User
+
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+  });
+
+  if (user) {
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid User data");
+  }
+});
 
 //@desc authenticate a user
 //@route POST /api/users/login
 //@access Public
 
-const loginUser = (req, res) => {
+const loginUser = asynchandler(async (req, res) => {
   res.json({ message: "Login User" });
-};
+});
 
 //@desc Get user data
 //@route GET /api/users/me
 //@access Private
 
-const getMe = (req, res) => {
+const getMe = asynchandler(async (req, res) => {
   res.json({ message: "User Data display" });
-};
+});
 
 module.exports = {
   regUser,
