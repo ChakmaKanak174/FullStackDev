@@ -1,7 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authService";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Get user from localStorage
+
 const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = {
@@ -12,9 +13,18 @@ const initialState = {
   message: "",
 };
 
-// register user
+// export const reg = createAsyncThunk('auth/register', async (user, thunkAPI) => {
+//     try {
+//         return await authService.register(user)
+//     } catch (error) {
+
+//     }
+// })
+
+// register user , this function deal with the backend
 export const register = createAsyncThunk(
   "auth/register",
+  // here user is passed from register page. this function is dispatched from that page.
   async (user, thunkAPI) => {
     try {
       return await authService.register(user);
@@ -26,15 +36,31 @@ export const register = createAsyncThunk(
         error.message ||
         error.toString();
 
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(message); //errormessage as payload
     }
   }
 );
 
+// export const authSice = createSlice({
+//     name: 'auth',
+//     initialState,
+//     reducers: {
+//         reset: (state) => {
+//             state.isLoading = false,
+//                 state.isError = false,
+//                 state.isSuccess = false,
+//                 state.message =''
+//         }
+//     },
+//     extraReducers: () => {}
+// })
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
+  // anything inside the reduces are not asynchronous
   reducers: {
+    // this function is dispatched after evrything is set, it resets back to default
     reset: (state) => {
       (state.isLoading = false),
         (state.isError = false),
@@ -42,8 +68,27 @@ export const authSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: () => {},
+
+  // asynchronous functions are inside extrareducers
+  extraReducers: (builder) => {
+    // this function handles the async --- pending, fulfilled, rejected these are autimatically handled by redux toolkit
+    builder
+      .addCase(register.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.user = null;
+      });
+  },
 });
 
-export const { reset } = authSlice.actions;
-export default authSlice.reducer;
+export const { reset } = authSlice.actions; // diferent export syntax for reducers inside slice.
+export default authSlice.reducer; // reducer is a function of the toolkit, not exactly the function that we write above. it uses our function inside it.
