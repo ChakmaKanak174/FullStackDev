@@ -151,6 +151,14 @@ h3 {
   justify-content: center;
 }
 
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 0.85rem;
+  width: auto;
+  margin-top: 8px;
+  align-items: end;
+}
+
 .btn svg {
   margin-right: 8px;
 }
