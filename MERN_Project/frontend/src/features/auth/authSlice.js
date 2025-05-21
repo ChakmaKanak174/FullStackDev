@@ -13,15 +13,7 @@ const initialState = {
   message: "",
 };
 
-// export const reg = createAsyncThunk('auth/register', async (user, thunkAPI) => {
-//     try {
-//         return await authService.register(user)
-//     } catch (error) {
-
-//     }
-// })
-
-// register user , this function deal with the backend
+// register user , this function deals with the backend
 export const register = createAsyncThunk(
   "auth/register",
   // here user is passed from register page. this function is dispatched from that page.
@@ -41,19 +33,22 @@ export const register = createAsyncThunk(
   }
 );
 
-// export const authSice = createSlice({
-//     name: 'auth',
-//     initialState,
-//     reducers: {
-//         reset: (state) => {
-//             state.isLoading = false,
-//                 state.isError = false,
-//                 state.isSuccess = false,
-//                 state.message =''
-//         }
-//     },
-//     extraReducers: () => {}
-// })
+export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
+  try {
+    return await authService.login(user);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+
+    return thunkAPI.rejectWithValue(message); //errormessage as payload
+  }
+});
+
+export const logout = createAsyncThunk("auth/logout", async () => {
+  await authService.logout();
+});
 
 export const authSlice = createSlice({
   name: "auth",
@@ -85,6 +80,24 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        state.user = null;
+      })
+      .addCase(login.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.user = null;
+      })
+
+      .addCase(logout.fulfilled, (state) => {
         state.user = null;
       });
   },
