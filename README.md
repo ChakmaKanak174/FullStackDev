@@ -3,6 +3,8 @@ VDO Link of the running project
 https://www.youtube.com/watch?v=mh7Ulj8GrDE
 
 
+The project folder is MERN_PROJECT
+
 
 
 # MERN Project – Vite + Express
