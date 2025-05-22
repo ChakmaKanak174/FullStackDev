@@ -47,10 +47,6 @@ const updateGoals = asyncHandler(async (req, res) => {
   // Make sure the logged in user matches the goal user
   if (goal.user.toString() !== String(req.user.id)) {
     res.status(401);
-    console.log("goal.user:", goal.user);
-    console.log("req.user:", req.user);
-    console.log("req.user.id:", req.user.id);
-    console.log("Comparing:", goal.user.toString(), "===", req.user.id);
 
     throw new Error("User not authorized");
   }
