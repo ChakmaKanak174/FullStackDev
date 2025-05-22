@@ -137,7 +137,7 @@ export const goalSlice = createSlice({
           if (!goal) return goal;
 
           if (goal._id === action.payload._id) {
-            return action.payload; // replace with updated goal
+            return action.payload;
           }
 
           return goal;
